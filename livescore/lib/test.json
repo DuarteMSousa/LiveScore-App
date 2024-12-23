@@ -1,0 +1,104 @@
+{
+  "get": "fixtures",
+  "parameters": { "id": "1214989" },
+  "errors": [],
+  "results": 1,
+  "paging": { "current": 1, "total": 1 },
+  "response": [
+    {
+      "fixture": {
+        "id": 1214989,
+        "referee": null,
+        "timezone": "UTC",
+        "date": "2024-12-23T18:00:00+00:00",
+        "timestamp": 1734976800,
+        "periods": { "first": 1734976800, "second": null },
+        "venue": {
+          "id": 866,
+          "name": "Teddi Malcha Stadium",
+          "city": "Jerusalem"
+        },
+        "status": {
+          "long": "First Half",
+          "short": "1H",
+          "elapsed": 43,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 383,
+        "name": "Ligat Ha'al",
+        "country": "Israel",
+        "logo": "https://media.api-sports.io/football/leagues/383.png",
+        "flag": "https://media.api-sports.io/flags/il.svg",
+        "season": 2024,
+        "round": "Regular Season - 15"
+      },
+      "teams": {
+        "home": {
+          "id": 657,
+          "name": "Beitar Jerusalem",
+          "logo": "https://media.api-sports.io/football/teams/657.png",
+          "winner": null
+        },
+        "away": {
+          "id": 6181,
+          "name": "Ironi Tiberias",
+          "logo": "https://media.api-sports.io/football/teams/6181.png",
+          "winner": null
+        }
+      },
+      "goals": { "home": 0, "away": 0 },
+      "score": {
+        "halftime": { "home": 0, "away": 0 },
+        "fulltime": { "home": null, "away": null },
+        "extratime": { "home": null, "away": null },
+        "penalty": { "home": null, "away": null }
+      },
+      "events": [
+        {
+          "time": { "elapsed": 22, "extra": null },
+          "team": {
+            "id": 6181,
+            "name": "Ironi Tiberias",
+            "logo": "https://media.api-sports.io/football/teams/6181.png"
+          },
+          "player": { "id": 110615, "name": "E. Balilti" },
+          "assist": { "id": null, "name": null },
+          "type": "Card",
+          "detail": "Yellow Card",
+          "comments": null
+        },
+        {
+          "time": { "elapsed": 38, "extra": null },
+          "team": {
+            "id": 657,
+            "name": "Beitar Jerusalem",
+            "logo": "https://media.api-sports.io/football/teams/657.png"
+          },
+          "player": { "id": null, "name": "T. Muzie" },
+          "assist": { "id": null, "name": null },
+          "type": "Card",
+          "detail": "Yellow Card",
+          "comments": null
+        },
+        {
+          "time": { "elapsed": 42, "extra": null },
+          "team": {
+            "id": 6181,
+            "name": "Ironi Tiberias",
+            "logo": "https://media.api-sports.io/football/teams/6181.png"
+          },
+          "player": { "id": null, "name": null },
+          "assist": { "id": null, "name": null },
+          "type": "Card",
+          "detail": "Red Card",
+          "comments": null
+        }
+      ],
+      "lineups": [],
+      "statistics": [],
+      "players": []
+    }
+  ]
+}
