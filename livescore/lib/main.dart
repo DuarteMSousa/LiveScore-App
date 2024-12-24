@@ -14,14 +14,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final brightness = View.of(context).platformDispatcher.platformBrightness;
-
     TextTheme textTheme = createTextTheme(context, "Unbounded", "Unbounded");
 
     MaterialTheme theme = MaterialTheme(textTheme);
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => MatchProvider()), // Provider inicializado aqui
+        ChangeNotifierProvider(create: (_) => MatchProvider()), 
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

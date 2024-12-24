@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:livescore/models/fixture.dart';
 
@@ -35,7 +34,7 @@ class ApiService {
     if (response.statusCode == 200) {
       var res = await response.stream.bytesToString();
       print(res);
-      return Fixture.fromJson(jsonDecode(res));
+      return Fixture.fromJson(jsonDecode(res)["response"][0]);
     } else {
       print(response.reasonPhrase);
       throw (Exception(response.reasonPhrase));

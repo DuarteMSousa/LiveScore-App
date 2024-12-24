@@ -9,6 +9,7 @@ class Fixture {
   final Teams? teams;
   final Goals? goals;
   final List<Event>? events;
+  final Status? status;
 
   Fixture(
       {required this.id,
@@ -20,25 +21,55 @@ class Fixture {
       required this.league,
       required this.teams,
       required this.goals,
-      required this.events});
+      required this.events,
+      required this.status});
 
-factory Fixture.fromJson(Map<String, dynamic> json) {
+  factory Fixture.fromJson(Map<String, dynamic> json) {
     return Fixture(
-    id:json['fixture']['id'],
-    timezone:json['fixture']['timezone'],
-    date:json['fixture']['date'],
-    timestamp:json['fixture']['timestamp'],
-    periods:json['fixture']['periods'] != null ? Periods.fromJson(json['periods']) : null,
-    venue:json['fixture']['venue'] != null ? Venue.fromJson(json['venue']) : null,
-    league:json['league'] != null ? League.fromJson(json['league']) : null,
-    teams:json['teams'] != null ? Teams.fromJson(json['teams']) : null,
-    goals:json['goals'] != null ? Goals.fromJson(json['goals']) : null,
-    events: (json['events'] as List<dynamic>?)
+      id: json['fixture']['id'],
+      timezone: json['fixture']['timezone'],
+      date: DateTime.parse(json['fixture']['date']),
+      timestamp: json['fixture']['timestamp'],
+      periods: json['fixture']['periods'] != null
+          ? Periods.fromJson(json['fixture']['periods'])
+          : null,
+      venue: json['fixture']['venue'] != null
+          ? Venue.fromJson(json['fixture']['venue'])
+          : null,
+      league: json['league'] != null ? League.fromJson(json['league']) : null,
+      teams: json['teams'] != null ? Teams.fromJson(json['teams']) : null,
+      goals: json['goals'] != null ? Goals.fromJson(json['goals']) : null,
+      events: (json['events'] as List<dynamic>?)
               ?.map((e) => Event.fromJson(e))
               .toList() ??
           [],
+      status: json['fixture']['status'] != null
+          ? Status.fromJson(json['fixture']['status'])
+          : null,
     );
-  }      
+  }
+}
+
+class Status {
+  final String long;
+  final String short;
+  final int elapsed;
+  final int extra;
+
+  Status(
+      {required this.long,
+      required this.short,
+      required this.elapsed,
+      required this.extra});
+
+  factory Status.fromJson(Map<String, dynamic> json) {
+    return Status(
+      long: json['long'],
+      short: json['short'],
+      elapsed: json['elapsed'] ?? 0,
+      extra: json['extra'] ?? 0,
+    );
+  }
 }
 
 class Event {
@@ -77,8 +108,8 @@ class Player {
 
   factory Player.fromJson(Map<String, dynamic> json) {
     return Player(
-      id: json['id'],
-      name: json['name'],
+      id: json['id'] ?? -1,
+      name: json['name'] ?? "null",
     );
   }
 }
@@ -91,8 +122,8 @@ class Time {
 
   factory Time.fromJson(Map<String, dynamic> json) {
     return Time(
-      elapsed: json['elapsed'],
-      extra: json['extra'],
+      elapsed: json['elapsed'] ?? 0,
+      extra: json['extra'] ?? 0,
     );
   }
 }
@@ -166,8 +197,8 @@ class Periods {
 
   factory Periods.fromJson(Map<String, dynamic> json) {
     return Periods(
-      first: json['first'],
-      second: json['second'],
+      first: json['first'] ?? 0,
+      second: json['second'] ?? 0,
     );
   }
 }
@@ -180,8 +211,8 @@ class Teams {
 
   factory Teams.fromJson(Map<String, dynamic> json) {
     return Teams(
-      home: json['home'] != null ? Team.fromJson(json['time']) : null,
-      away: json['away'] != null ? Team.fromJson(json['team']) : null,
+      home: json['home'] != null ? Team.fromJson(json['home']) : null,
+      away: json['away'] != null ? Team.fromJson(json['away']) : null,
     );
   }
 }

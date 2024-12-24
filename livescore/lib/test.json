@@ -12,17 +12,17 @@
         "timezone": "UTC",
         "date": "2024-12-23T18:00:00+00:00",
         "timestamp": 1734976800,
-        "periods": { "first": 1734976800, "second": null },
+        "periods": { "first": 1734976800, "second": 1734980400 },
         "venue": {
           "id": 866,
           "name": "Teddi Malcha Stadium",
           "city": "Jerusalem"
         },
         "status": {
-          "long": "First Half",
-          "short": "1H",
-          "elapsed": 43,
-          "extra": null
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": 7
         }
       },
       "league": {
@@ -48,10 +48,10 @@
           "winner": null
         }
       },
-      "goals": { "home": 0, "away": 0 },
+      "goals": { "home": 1, "away": 1 },
       "score": {
         "halftime": { "home": 0, "away": 0 },
-        "fulltime": { "home": null, "away": null },
+        "fulltime": { "home": 1, "away": 1 },
         "extratime": { "home": null, "away": null },
         "penalty": { "home": null, "away": null }
       },
@@ -89,14 +89,212 @@
             "name": "Ironi Tiberias",
             "logo": "https://media.api-sports.io/football/teams/6181.png"
           },
-          "player": { "id": null, "name": null },
+          "player": { "id": 277560, "name": "Y. Teper" },
           "assist": { "id": null, "name": null },
           "type": "Card",
           "detail": "Red Card",
           "comments": null
+        },
+        {
+          "time": { "elapsed": 57, "extra": null },
+          "team": {
+            "id": 6181,
+            "name": "Ironi Tiberias",
+            "logo": "https://media.api-sports.io/football/teams/6181.png"
+          },
+          "player": { "id": 8514, "name": "J. Botaka" },
+          "assist": { "id": null, "name": null },
+          "type": "Goal",
+          "detail": "Penalty",
+          "comments": null
+        },
+        {
+          "time": { "elapsed": 58, "extra": null },
+          "team": {
+            "id": 657,
+            "name": "Beitar Jerusalem",
+            "logo": "https://media.api-sports.io/football/teams/657.png"
+          },
+          "player": { "id": 126957, "name": "Z. Zasno" },
+          "assist": { "id": null, "name": "T. Muzie" },
+          "type": "subst",
+          "detail": "Substitution 1",
+          "comments": null
+        },
+        {
+          "time": { "elapsed": 58, "extra": null },
+          "team": {
+            "id": 657,
+            "name": "Beitar Jerusalem",
+            "logo": "https://media.api-sports.io/football/teams/657.png"
+          },
+          "player": { "id": null, "name": "Silva Kani" },
+          "assist": { "id": 349781, "name": "A. Yona" },
+          "type": "subst",
+          "detail": "Substitution 2",
+          "comments": null
+        },
+        {
+          "time": { "elapsed": 63, "extra": null },
+          "team": {
+            "id": 6181,
+            "name": "Ironi Tiberias",
+            "logo": "https://media.api-sports.io/football/teams/6181.png"
+          },
+          "player": { "id": 126569, "name": "H. Shapso" },
+          "assist": { "id": null, "name": null },
+          "type": "Card",
+          "detail": "Yellow Card",
+          "comments": null
+        },
+        {
+          "time": { "elapsed": 69, "extra": null },
+          "team": {
+            "id": 657,
+            "name": "Beitar Jerusalem",
+            "logo": "https://media.api-sports.io/football/teams/657.png"
+          },
+          "player": { "id": null, "name": "Silva Kani" },
+          "assist": { "id": 47374, "name": "P. Twumasi" },
+          "type": "Goal",
+          "detail": "Normal Goal",
+          "comments": null
+        },
+        {
+          "time": { "elapsed": 73, "extra": null },
+          "team": {
+            "id": 6181,
+            "name": "Ironi Tiberias",
+            "logo": "https://media.api-sports.io/football/teams/6181.png"
+          },
+          "player": { "id": 61182, "name": "S. Bilenkyi" },
+          "assist": { "id": null, "name": null },
+          "type": "Card",
+          "detail": "Yellow Card",
+          "comments": null
+        },
+        {
+          "time": { "elapsed": 76, "extra": null },
+          "team": {
+            "id": 657,
+            "name": "Beitar Jerusalem",
+            "logo": "https://media.api-sports.io/football/teams/657.png"
+          },
+          "player": { "id": 108018, "name": "Y. Shua" },
+          "assist": { "id": null, "name": null },
+          "type": "Card",
+          "detail": "Yellow Card",
+          "comments": null
+        },
+        {
+          "time": { "elapsed": 81, "extra": null },
+          "team": {
+            "id": 657,
+            "name": "Beitar Jerusalem",
+            "logo": "https://media.api-sports.io/football/teams/657.png"
+          },
+          "player": { "id": 76432, "name": "I. Soro" },
+          "assist": { "id": null, "name": "L. Yarin" },
+          "type": "subst",
+          "detail": "Substitution 3",
+          "comments": null
+        },
+        {
+          "time": { "elapsed": 85, "extra": null },
+          "team": {
+            "id": 657,
+            "name": "Beitar Jerusalem",
+            "logo": "https://media.api-sports.io/football/teams/657.png"
+          },
+          "player": { "id": 111408, "name": "G. Cohen" },
+          "assist": { "id": null, "name": null },
+          "type": "Card",
+          "detail": "Yellow Card",
+          "comments": null
+        },
+        {
+          "time": { "elapsed": 87, "extra": null },
+          "team": {
+            "id": 657,
+            "name": "Beitar Jerusalem",
+            "logo": "https://media.api-sports.io/football/teams/657.png"
+          },
+          "player": { "id": 362999, "name": "N. Dabush" },
+          "assist": { "id": 47374, "name": "P. Twumasi" },
+          "type": "subst",
+          "detail": "Substitution 4",
+          "comments": null
+        },
+        {
+          "time": { "elapsed": 89, "extra": null },
+          "team": {
+            "id": 6181,
+            "name": "Ironi Tiberias",
+            "logo": "https://media.api-sports.io/football/teams/6181.png"
+          },
+          "player": { "id": 110646, "name": "W. Habiballa" },
+          "assist": { "id": 61182, "name": "S. Bilenkyi" },
+          "type": "subst",
+          "detail": "Substitution 1",
+          "comments": null
+        },
+        {
+          "time": { "elapsed": 90, "extra": 1 },
+          "team": {
+            "id": 6181,
+            "name": "Ironi Tiberias",
+            "logo": "https://media.api-sports.io/football/teams/6181.png"
+          },
+          "player": { "id": 110836, "name": "F. Abu Akel" },
+          "assist": { "id": null, "name": null },
+          "type": "Card",
+          "detail": "Yellow Card",
+          "comments": null
+        },
+        {
+          "time": { "elapsed": 90, "extra": 2 },
+          "team": {
+            "id": 657,
+            "name": "Beitar Jerusalem",
+            "logo": "https://media.api-sports.io/football/teams/657.png"
+          },
+          "player": { "id": 56010, "name": "D. Micha" },
+          "assist": { "id": null, "name": null },
+          "type": "Card",
+          "detail": "Yellow Card",
+          "comments": null
         }
       ],
-      "lineups": [],
+      "lineups": [
+        {
+          "team": {
+            "id": 657,
+            "name": "Beitar Jerusalem",
+            "logo": "https://media.api-sports.io/football/teams/657.png",
+            "colors": null
+          },
+          "coach": {
+            "id": 16089,
+            "name": "B. Itzhaki",
+            "photo": "https://media.api-sports.io/football/coachs/16089.png"
+          },
+          "formation": null
+        },
+        {
+          "team": {
+            "id": 6181,
+            "name": "Ironi Tiberias",
+            "logo": "https://media.api-sports.io/football/teams/6181.png",
+            "colors": null
+          },
+          "coach": {
+            "id": 12387,
+            "name": "E. Hudeda",
+            "photo": "https://media.api-sports.io/football/coachs/12387.png"
+          },
+          "formation": null
+        }
+      ],
       "statistics": [],
       "players": []
     }

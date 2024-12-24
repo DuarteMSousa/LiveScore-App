@@ -1,8 +1,8 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:livescore/models/fixture.dart';
 import 'package:livescore/providers/match_provider.dart';
-import 'package:livescore/services/api_service.dart';
 import 'package:livescore/widgets/topbar.dart';
 import 'package:livescore/widgets/bottombar.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +19,6 @@ class _LivegameScreenState extends State<LivegameScreen> {
   @override
   void initState() {
     super.initState();
-    // Carregar o match pelo ID assim que o widget for inicializado
     context.read<MatchProvider>().loadMatchById(widget.id);
   }
 
@@ -46,13 +45,16 @@ class _LivegameScreenState extends State<LivegameScreen> {
                   padding: EdgeInsets.symmetric(horizontal: 40, vertical: 30),
                   child: Placard(
                     goals: matchProvider.selectedMatch!.goals!,
-                    minute:
-                        (matchProvider.selectedMatch!.timestamp / 60).toInt(),
+                    status: matchProvider.selectedMatch!.status!,
                     teams: matchProvider.selectedMatch!.teams!,
                   ),
                 ),
                 // Eventos/Planteis
-                Expanded(child: GameInfo()),
+                Expanded(
+                    child: GameInfo(
+                  events: matchProvider.selectedMatch!.events!,
+                  homeId: matchProvider.selectedMatch!.teams!.home!.id,
+                )),
               ],
             ),
           );
@@ -64,16 +66,18 @@ class _LivegameScreenState extends State<LivegameScreen> {
 }
 
 class Placard extends StatelessWidget {
-  final int minute;
+  final Status status;
   final Goals goals;
   final Teams teams;
-  const Placard(
-      {super.key,
-      required this.goals,
-      required this.teams,
-      required this.minute});
+  const Placard({
+    super.key,
+    required this.goals,
+    required this.teams,
+    required this.status,
+  });
   @override
   Widget build(BuildContext context) {
+    var screenHeight = MediaQuery.of(context).size.height;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 50),
       decoration: BoxDecoration(
@@ -90,9 +94,19 @@ class Placard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Image(
-            image: NetworkImage(teams.home!.logo),
-            fit: BoxFit.fitHeight,
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Image(
+                height: screenHeight * 0.15,
+                image: NetworkImage(teams.home!.logo),
+                fit: BoxFit.fitHeight,
+              ),
+              Text(teams.home!.name,
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context).colorScheme.onTertiary))
+            ],
           ),
           Column(
             children: [
@@ -101,16 +115,32 @@ class Placard extends StatelessWidget {
                 style: TextStyle(fontSize: 20),
               ),
               Text(
-                "$minute'",
+                status.short == "FT"
+                    ? "FT"
+                    : status.short == "HT"
+                        ? "HT"
+                        : "${status.elapsed}'${status.extra > 0 ? "+${status.extra}'" : ''}",
                 style: TextStyle(
                     color: Theme.of(context).colorScheme.primary, fontSize: 10),
               )
             ],
           ),
-          Image(
-            image: NetworkImage(teams.away!.logo),
-            fit: BoxFit.fitHeight,
-          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Image(
+                height: screenHeight * 0.15,
+                image: NetworkImage(teams.away!.logo),
+                fit: BoxFit.fitHeight,
+              ),
+              Text(
+                teams.away!.name,
+                style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).colorScheme.onTertiary),
+              )
+            ],
+          )
         ],
       ),
     );
@@ -118,6 +148,9 @@ class Placard extends StatelessWidget {
 }
 
 class GameInfo extends StatefulWidget {
+  final List<Event> events;
+  final int homeId;
+  const GameInfo({super.key, required this.events, required this.homeId});
   @override
   _GameInfoState createState() => _GameInfoState();
 }
@@ -155,7 +188,7 @@ class _GameInfoState extends State<GameInfo> with TickerProviderStateMixin {
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  Resumo(),
+                  Resumo(events: widget.events, homeId: widget.homeId),
                   Planteis(),
                 ],
               ),
@@ -187,30 +220,155 @@ class Planteis extends StatelessWidget {
 }
 
 class Resumo extends StatelessWidget {
-  const Resumo({super.key});
+  final List<Event> events;
+  final int homeId;
+  const Resumo({super.key, required this.events, required this.homeId});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          children: events.map((event) {
+            return FractionallySizedBox(
+                widthFactor: 1,
+                child: EventLine(event: event, home: event.team!.id == homeId));
+          }).toList(),
+        ),
+      ),
+    );
+  }
+}
+
+class EventLine extends StatelessWidget {
+  final Event event;
+  final bool home;
+  const EventLine({super.key, required this.event, required this.home});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: EdgeInsets.symmetric(vertical: 10),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            FractionallySizedBox(
-                widthFactor: 0.5,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      children: [Text("Cartão Amarelo")],
-                    ),
-                    Column(
-                      children: [Text("57'")],
-                    ),
-                  ],
-                ))
+            Expanded(
+              flex: 1,
+              child: home ? EventInfo(event: event, home: home) : Text(""),
+            ),
+            Expanded(
+              flex: 1,
+              child: Text(
+                "${event.time!.elapsed}'",
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Expanded(
+                flex: 1,
+                child: home ? Text("") : EventInfo(event: event, home: home)),
           ],
         ));
+  }
+}
+
+class EventInfo extends StatelessWidget {
+  final Event event;
+  final bool home;
+  const EventInfo({super.key, required this.event, required this.home});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: home ? MainAxisAlignment.start : MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        if (event.type == "Goal") ...[
+          home ? Icon(Icons.sports_soccer) : SizedBox(),
+          Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                crossAxisAlignment:
+                    home ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    "Golo!",
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onTertiary,
+                        fontSize: 12),
+                  ),
+                  Text(event.player!.name,
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 10))
+                ],
+              )),
+          !home ? Icon(Icons.sports_soccer) : SizedBox(),
+        ] else if (event.type == "Card") ...[
+          home
+              ? Transform.rotate(
+                  angle: 90 * (3.141592653589793 / 180),
+                  child: Icon(Icons.rectangle_rounded))
+              : SizedBox(),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              crossAxisAlignment:
+                  home ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+              children: [
+                Text(
+                  event.detail,
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.onTertiary,
+                      fontSize: 12),
+                ),
+                Text(event.player!.name,
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontSize: 10))
+              ],
+            ),
+          ),
+          !home
+              ? Transform.rotate(
+                  angle: 90 * (3.141592653589793 / 180),
+                  child: Icon(Icons.rectangle_rounded))
+              : SizedBox()
+        ] else if (event.type == "subst") ...[
+          home ? Icon(Icons.subdirectory_arrow_right) : SizedBox(),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              crossAxisAlignment:
+                  home ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+              children: [
+                Text(
+                  "Substituição",
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.onTertiary,
+                      fontSize: 12),
+                ),
+                Row(
+                  children: [
+                    Text(event.assist!.name,
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 10)),
+                    Icon(Icons.arrow_forward,size: 13,),
+                    Text(event.player!.name,
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 10))
+                  ],
+                )
+              ],
+            ),
+          ),
+          !home ? Icon(Icons.subdirectory_arrow_right) : SizedBox(),
+        ]
+      ],
+    );
   }
 }
 
