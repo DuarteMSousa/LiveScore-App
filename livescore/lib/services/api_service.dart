@@ -7,9 +7,9 @@ class ApiService {
   final String apikey = "99f155ab0f98ae3f59b71b763d2b55e8";
   final String host = "v3.football.api-sports.io";
 
-  Future<List<Fixture>> getAllMatchs() async {
+  Future<List<Fixture>> getAllMatchesToday() async {
     var headers = {'x-rapidapi-key': apikey, 'x-rapidapi-host': host};
-    var request = http.Request('GET', Uri.parse('${baseUrl}fixtures?live=all'));
+    var request = http.Request('GET', Uri.parse('${baseUrl}fixtures?date=${DateTime.now().toIso8601String().split("T")[0]}'));
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
@@ -17,7 +17,7 @@ class ApiService {
     if (response.statusCode == 200) {
       var res = await response.stream.bytesToString();
       print(res);
-      List<dynamic> body = jsonDecode(res);
+      List<dynamic> body = jsonDecode(res)["response"];
       return body.map((item) => Fixture.fromJson(item)).toList();
     } else {
       throw (Exception(response.reasonPhrase));
@@ -33,7 +33,6 @@ class ApiService {
 
     if (response.statusCode == 200) {
       var res = await response.stream.bytesToString();
-      print(res);
       return Fixture.fromJson(jsonDecode(res)["response"][0]);
     } else {
       print(response.reasonPhrase);

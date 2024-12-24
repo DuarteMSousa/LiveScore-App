@@ -1,3 +1,4 @@
+import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:livescore/models/fixture.dart';
 import 'package:livescore/services/api_service.dart';
@@ -19,8 +20,7 @@ class MatchProvider with ChangeNotifier {
   Fixture? selectedMatch;
 
   /// Lista de utilizadores selecionados.
-  List<Fixture>? selectedMatchList;
-
+  Map<int,List<Fixture>>? selectedmatchHash;
 
   /// Limpa a mensagem de erro.
   void changeErrorValue(String e) {
@@ -43,23 +43,27 @@ class MatchProvider with ChangeNotifier {
     }
   }
 
-  // /// Busca todos os utilizadores.
-  // Future<void> loadOwnUtilizador() async {
-  //   isLoading.value = true;
-  //   notifyListeners();
-  //   try {
-  //     final utilizador = await _apiService.getOwnUtilizador();
-  //     selectedUtilizador = utilizador;
-  //     notifyListeners();
-  //   } catch (e) {
-  //     isLoading.value = false;
-  //     errorMessage.value = e.toString();
-  //     notifyListeners();
-  //   } finally {
-  //     isLoading.value = false;
-  //     notifyListeners();
-  //   }
-  // }
+  Future<void> loadAllTodayMatches() async {
+    isLoading.value = true;
+    notifyListeners();
+    try {
+      final matchList = await _apiService.getAllMatchesToday();
+      var matchHash = <int, List<Fixture>>{};
+      for (var match in matchList) {
+        if (matchHash.containsKey(match.league!.id)) {
+          matchHash[match.league!.id]!.add(match);
+        } else {
+          matchHash[match.league!.id] = [match];
+        }
+      }
+      selectedmatchHash = matchHash;
+    } catch (e) {
+      errorMessage.value = e.toString();
+    } finally {
+      isLoading.value = false;
+      notifyListeners();
+    }
+  }
 
   // /// Busca todos os utilizadores com o perfil de administrador (ADM).
   // Future<void> loadAllADMs() async {

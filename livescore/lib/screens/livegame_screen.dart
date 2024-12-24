@@ -355,7 +355,10 @@ class EventInfo extends StatelessWidget {
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.primary,
                             fontSize: 10)),
-                    Icon(Icons.arrow_forward,size: 13,),
+                    Icon(
+                      Icons.arrow_forward,
+                      size: 13,
+                    ),
                     Text(event.player!.name,
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.primary,

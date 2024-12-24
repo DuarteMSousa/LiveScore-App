@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:livescore/router.dart';
+import 'package:livescore/screens/matchlist_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:livescore/providers/match_provider.dart';
 import 'package:livescore/screens/livegame_screen.dart';
@@ -6,7 +8,14 @@ import 'util.dart';
 import 'theme.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => MatchProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -17,16 +26,11 @@ class MyApp extends StatelessWidget {
     TextTheme textTheme = createTextTheme(context, "Unbounded", "Unbounded");
 
     MaterialTheme theme = MaterialTheme(textTheme);
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => MatchProvider()), 
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: theme.dark(),
-        home: const LivegameScreen(id: '1214989'),
-      ),
+    return MaterialApp.router(
+      title: 'Flutter Demo',
+      routerConfig: router,
+      debugShowCheckedModeBanner: false,
+      theme: theme.dark(),
     );
   }
 }

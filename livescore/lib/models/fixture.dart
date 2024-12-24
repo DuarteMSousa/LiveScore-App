@@ -26,10 +26,10 @@ class Fixture {
 
   factory Fixture.fromJson(Map<String, dynamic> json) {
     return Fixture(
-      id: json['fixture']['id'],
-      timezone: json['fixture']['timezone'],
-      date: DateTime.parse(json['fixture']['date']),
-      timestamp: json['fixture']['timestamp'],
+      id: json['fixture']['id']??0,
+      timezone: json['fixture']['timezone']??0,
+      date: DateTime.parse(json['fixture']['date'])??DateTime.now(),
+      timestamp: json['fixture']['timestamp']??0,
       periods: json['fixture']['periods'] != null
           ? Periods.fromJson(json['fixture']['periods'])
           : null,
@@ -64,8 +64,8 @@ class Status {
 
   factory Status.fromJson(Map<String, dynamic> json) {
     return Status(
-      long: json['long'],
-      short: json['short'],
+      long: json['long']??"",
+      short: json['short']??"",
       elapsed: json['elapsed'] ?? 0,
       extra: json['extra'] ?? 0,
     );
@@ -136,8 +136,8 @@ class Goals {
 
   factory Goals.fromJson(Map<String, dynamic> json) {
     return Goals(
-      home: json['home'],
-      away: json['away'],
+      home: json['home']??0,
+      away: json['away']??0,
     );
   }
 }
@@ -162,13 +162,13 @@ class League {
 
   factory League.fromJson(Map<String, dynamic> json) {
     return League(
-      id: json['id'],
-      name: json['name'],
-      country: json['country'],
-      logo: json['logo'],
-      flag: json['flag'],
-      season: json['season'],
-      round: json['round'],
+      id: json['id']??0,
+      name: json['name']??"",
+      country: json['country']??"",
+      logo: json['logo']??"",
+      flag: json['flag']??"",
+      season: json['season']??"",
+      round: json['round']??"",
     );
   }
 }
@@ -182,9 +182,9 @@ class Venue {
 
   factory Venue.fromJson(Map<String, dynamic> json) {
     return Venue(
-      id: json['id'],
-      name: json['name'],
-      city: json['city'],
+      id: json['id']??0,
+      name: json['name']??"",
+      city: json['city']??"",
     );
   }
 }
@@ -226,9 +226,9 @@ class Team {
 
   factory Team.fromJson(Map<String, dynamic> json) {
     return Team(
-      id: json['id'],
-      name: json['name'],
-      logo: json['logo'],
+      id: json['id']??0,
+      name: json['name']??'',
+      logo: json['logo']??'',
     );
   }
 }
