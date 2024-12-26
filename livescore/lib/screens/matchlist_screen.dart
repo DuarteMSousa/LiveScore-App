@@ -47,13 +47,15 @@ class _MatchlistScreenState extends State<MatchlistScreen>
                 child: Column(
                   children: [
                     TabBar(
-                      padding: EdgeInsets.only(top: 15),
                       controller: _tabController,
                       dividerColor: Colors.transparent,
                       tabs: [
                         Tab(text: "Favoritos"),
                         Tab(text: "Todos"),
                       ],
+                    ),
+                    SizedBox(
+                      height: 10,
                     ),
                     Expanded(
                         child: TabBarView(
@@ -133,11 +135,8 @@ class MatchCard extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          match.status!.short == "FT"
-                              ? "FT"
-                              : match.status!.short == "HT"
-                                  ? "HT"
-                                  : "${match.status!.elapsed}'${match.status!.extra > 0 ? "+${match.status!.extra}'" : ''}",
+                          processMatchShort(
+                              match.status!.short, match.status!.elapsed,match.date),
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.primary,
                               fontSize: 10),
@@ -166,6 +165,17 @@ class MatchCard extends StatelessWidget {
           ),
         ));
   }
+}
+
+String processMatchShort(String short, int elapsed, DateTime date) {
+  if (short == "FT" || short == "HT" || short == "TBD") {
+    return short;
+  } else if (short == "1H" || short == "2H") {
+    return "$elapsed'";
+  } else if (short == "NS") {
+    return "${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}";
+  }
+  return short;
 }
 
 class leagueHeader extends StatelessWidget {

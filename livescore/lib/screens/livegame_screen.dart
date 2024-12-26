@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:livescore/models/fixture.dart';
 import 'package:livescore/providers/match_provider.dart';
+import 'package:livescore/screens/matchlist_screen.dart';
 import 'package:livescore/widgets/topbar.dart';
 import 'package:livescore/widgets/bottombar.dart';
 import 'package:provider/provider.dart';
@@ -94,53 +93,61 @@ class Placard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Image(
-                height: screenHeight * 0.15,
-                image: NetworkImage(teams.home!.logo),
-                fit: BoxFit.fitHeight,
-              ),
-              Text(teams.home!.name,
+          Expanded(
+              flex: 1,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Image(
+                    height: screenHeight * 0.10,
+                    image: NetworkImage(teams.home!.logo),
+                    fit: BoxFit.fitHeight,
+                  ),
+                  SizedBox(height: 15),
+                  Text(teams.home!.name,
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).colorScheme.onTertiary))
+                ],
+              )),
+          Expanded(
+            flex: 1,
+            child: Column(
+              children: [
+                Text(
+                  "${goals.home} - ${goals.away}",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20),
+                ),
+                Text(
+                  processMatchShort(
+                      status.short, status.elapsed, DateTime.now()),
                   style: TextStyle(
-                      fontSize: 14,
-                      color: Theme.of(context).colorScheme.onTertiary))
-            ],
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 10),
+                )
+              ],
+            ),
           ),
-          Column(
-            children: [
-              Text(
-                "${goals.home}-${goals.away}",
-                style: TextStyle(fontSize: 20),
-              ),
-              Text(
-                status.short == "FT"
-                    ? "FT"
-                    : status.short == "HT"
-                        ? "HT"
-                        : "${status.elapsed}'${status.extra > 0 ? "+${status.extra}'" : ''}",
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary, fontSize: 10),
-              )
-            ],
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Image(
-                height: screenHeight * 0.15,
-                image: NetworkImage(teams.away!.logo),
-                fit: BoxFit.fitHeight,
-              ),
-              Text(
-                teams.away!.name,
-                style: TextStyle(
-                    fontSize: 14,
-                    color: Theme.of(context).colorScheme.onTertiary),
-              )
-            ],
-          )
+          Expanded(
+              flex: 1,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Image(
+                    height: screenHeight * 0.1,
+                    image: NetworkImage(teams.away!.logo),
+                    fit: BoxFit.fitHeight,
+                  ),
+                  SizedBox(height: 15),
+                  Text(
+                    teams.away!.name,
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Theme.of(context).colorScheme.onTertiary),
+                  )
+                ],
+              ))
         ],
       ),
     );

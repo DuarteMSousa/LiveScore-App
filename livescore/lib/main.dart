@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:livescore/router.dart';
-import 'package:livescore/screens/matchlist_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:livescore/providers/match_provider.dart';
-import 'package:livescore/screens/livegame_screen.dart';
 import 'util.dart';
 import 'theme.dart';
 
