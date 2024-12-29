@@ -24,6 +24,23 @@ class ApiService {
     }
   }
 
+    Future<Fixture> getTeamMatchesToday(int team) async {
+    var headers = {'x-rapidapi-key': apikey, 'x-rapidapi-host': host};
+var request = http.Request('GET', Uri.parse('${baseUrl}fixtures?date=${DateTime.now().toIso8601String().split("T")[0]}&team=$team'));
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var res = await response.stream.bytesToString();
+      print(res);
+      List<dynamic> body = jsonDecode(res)["response"];
+      return Fixture.fromJson(body[0]);
+    } else {
+      throw (Exception(response.reasonPhrase));
+    }
+  }
+
   Future<Fixture> getMatch(String id) async {
     var headers = {'x-rapidapi-key': apikey, 'x-rapidapi-host': host};
     var request = http.Request('GET', Uri.parse('${baseUrl}fixtures?id=$id'));
@@ -69,6 +86,23 @@ class ApiService {
     if (response.statusCode == 200) {
       print(await response.stream.bytesToString());
       return response.stream.bytesToString();
+    } else {
+      throw (Exception(response.reasonPhrase));
+    }
+  }
+
+    Future<List<Team>> searchTeams(String search) async {
+    var headers = {'x-rapidapi-key': apikey, 'x-rapidapi-host': host};
+    var request = http.Request('GET', Uri.parse('${baseUrl}teams?search=$search'));
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var res = await response.stream.bytesToString();
+      print(res);
+      List<dynamic> body = jsonDecode(res)["response"];
+      return body.map((item) => Team.fromJson(item["team"])).toList();
     } else {
       throw (Exception(response.reasonPhrase));
     }

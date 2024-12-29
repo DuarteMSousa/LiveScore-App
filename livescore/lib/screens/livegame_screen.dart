@@ -24,7 +24,7 @@ class _LivegameScreenState extends State<LivegameScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const Topbar(),
+      appBar: const  Topbar(),
       body: Consumer<MatchProvider>(
         builder: (context, matchProvider, child) {
           if (matchProvider.isLoading.value) {

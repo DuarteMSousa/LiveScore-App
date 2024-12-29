@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:livescore/providers/search_provider.dart';
+import 'package:livescore/providers/shared_preferences_provider.dart';
 import 'package:livescore/router.dart';
 import 'package:provider/provider.dart';
 import 'package:livescore/providers/match_provider.dart';
@@ -10,6 +12,8 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => MatchProvider()),
+        ChangeNotifierProvider(create: (_) => SearchProvider()),
+        ChangeNotifierProvider(create: (_) => SharedPreferencesProvider()),
       ],
       child: MyApp(),
     ),

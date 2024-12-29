@@ -2,6 +2,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:livescore/screens/livegame_screen.dart';
 import 'package:livescore/screens/matchlist_screen.dart';
+import 'package:livescore/screens/search_screen.dart';
 
 /// Este é o arquivo de configuração do GoRouter.
 ///
@@ -26,6 +27,11 @@ final GoRouter router = GoRouter(
         final id = state.pathParameters['id'];
         return LivegameScreen(id: id!);
       },
+    ),
+     GoRoute(
+      /// Rota para a página de login.
+      path: '/search',
+      builder: (context, state) => const SearchScreen(),
     ),
   ],
 );

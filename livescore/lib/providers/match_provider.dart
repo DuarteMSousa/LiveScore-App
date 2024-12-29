@@ -20,8 +20,10 @@ class MatchProvider with ChangeNotifier {
   Fixture? selectedMatch;
 
   /// Lista de utilizadores selecionados.
-  Map<int,List<Fixture>>? selectedmatchHash;
+  Map<int,List<Fixture>>? allSelectedMatchesHash;
 
+  /// Lista de utilizadores selecionados.
+  Map<int,List<Fixture>>? favSelectedMatchesHash;
   /// Limpa a mensagem de erro.
   void changeErrorValue(String e) {
     errorMessage.value = '';
@@ -56,7 +58,32 @@ class MatchProvider with ChangeNotifier {
           matchHash[match.league!.id] = [match];
         }
       }
-      selectedmatchHash = matchHash;
+      allSelectedMatchesHash = matchHash;
+    } catch (e) {
+      errorMessage.value = e.toString();
+    } finally {
+      isLoading.value = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> loadAllFavTeamsMatches(List<int> teams) async {
+    isLoading.value = true;
+    notifyListeners();
+    try {
+      var matchList=[];
+      for (var team in teams) {
+       matchList.add(_apiService.getTeamMatchesToday(team));
+      }
+      var matchHash = <int, List<Fixture>>{};
+      for (var match in matchList) {
+        if (matchHash.containsKey(match.league!.id)) {
+          matchHash[match.league!.id]!.add(match);
+        } else {
+          matchHash[match.league!.id] = [match];
+        }
+      }
+      favSelectedMatchesHash = matchHash;
     } catch (e) {
       errorMessage.value = e.toString();
     } finally {

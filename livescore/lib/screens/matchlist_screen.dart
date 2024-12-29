@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:livescore/models/fixture.dart';
 import 'package:livescore/providers/match_provider.dart';
+import 'package:livescore/providers/shared_preferences_provider.dart';
 import 'package:livescore/widgets/bottombar.dart';
 import 'package:livescore/widgets/topbar.dart';
 import 'package:provider/provider.dart';
@@ -22,23 +23,32 @@ class _MatchlistScreenState extends State<MatchlistScreen>
     super.initState();
     _tabController = TabController(length: 2, vsync: this, initialIndex: 1);
     context.read<MatchProvider>().loadAllTodayMatches();
+    loadFavTeamsMatches();
+  }
+
+  Future<void> loadFavTeamsMatches() async {
+    await context.read<SharedPreferencesProvider>().loadFavTeams();
+    await context.read<MatchProvider>().loadAllFavTeamsMatches(
+        context.read<SharedPreferencesProvider>().favTeams.value);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Topbar(),
-      body: Consumer<MatchProvider>(builder: (context, matchProvider, child) {
-        if (matchProvider.isLoading.value) {
+      body: Consumer2<MatchProvider, SharedPreferencesProvider>(
+          builder: (context, matchProvider, sharedPreferencesProvider, child) {
+        if (matchProvider.isLoading.value ||
+            sharedPreferencesProvider.isLoading.value) {
           return Center(child: CircularProgressIndicator());
         }
 
-        if (matchProvider.errorMessage.value.isNotEmpty) {
+        if (matchProvider.errorMessage.value.isNotEmpty ||
+            sharedPreferencesProvider.errorMessage.value.isNotEmpty) {
           return Center(child: Text(matchProvider.errorMessage.value));
         }
-
         return Padding(
-            padding: EdgeInsets.only(left: 10, right: 10, top: 30, bottom: 20),
+            padding: EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 20),
             child: Container(
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.tertiary,
@@ -65,15 +75,36 @@ class _MatchlistScreenState extends State<MatchlistScreen>
                           child: Column(
                             children: [
                               for (var leagueId
-                                  in matchProvider.selectedmatchHash!.keys)
+                                  in matchProvider.favSelectedMatchesHash!.keys)
                                 Column(
                                   children: [
                                     leagueHeader(
                                         league: matchProvider
-                                            .selectedmatchHash![leagueId]![0]
+                                            .favSelectedMatchesHash![leagueId]![
+                                                0]
                                             .league!),
                                     for (var match in matchProvider
-                                        .selectedmatchHash![leagueId]!)
+                                        .favSelectedMatchesHash![leagueId]!)
+                                      MatchCard(match: match)
+                                  ],
+                                ),
+                            ],
+                          ),
+                        ),
+                        SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              for (var leagueId
+                                  in matchProvider.allSelectedMatchesHash!.keys)
+                                Column(
+                                  children: [
+                                    leagueHeader(
+                                        league: matchProvider
+                                            .allSelectedMatchesHash![leagueId]![
+                                                0]
+                                            .league!),
+                                    for (var match in matchProvider
+                                        .allSelectedMatchesHash![leagueId]!)
                                       MatchCard(match: match)
                                   ],
                                 ),
@@ -135,8 +166,8 @@ class MatchCard extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          processMatchShort(
-                              match.status!.short, match.status!.elapsed,match.date),
+                          processMatchShort(match.status!.short,
+                              match.status!.elapsed, match.date),
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.primary,
                               fontSize: 10),

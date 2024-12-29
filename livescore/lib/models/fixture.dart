@@ -28,7 +28,7 @@ class Fixture {
     return Fixture(
       id: json['fixture']['id']??0,
       timezone: json['fixture']['timezone']??0,
-      date: DateTime.parse(json['fixture']['date'])??DateTime.now(),
+      date: DateTime.parse(json['fixture']['date']??DateTime.now().toString()),
       timestamp: json['fixture']['timestamp']??0,
       periods: json['fixture']['periods'] != null
           ? Periods.fromJson(json['fixture']['periods'])
