@@ -81,12 +81,18 @@ class SearchResult extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Image(
-                alignment: Alignment.center,
+              Image.network(
+                image,
                 height: 70,
                 width: 70,
-                image: NetworkImage(image),
                 fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  return Icon(
+                    Icons.broken_image,
+                    size: 70,
+                    color: Colors.grey,
+                  );
+                },
               ),
               Expanded(
                 child: Text(

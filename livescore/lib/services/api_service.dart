@@ -9,7 +9,10 @@ class ApiService {
 
   Future<List<Fixture>> getAllMatchesToday() async {
     var headers = {'x-rapidapi-key': apikey, 'x-rapidapi-host': host};
-    var request = http.Request('GET', Uri.parse('${baseUrl}fixtures?date=${DateTime.now().toIso8601String().split("T")[0]}'));
+    var request = http.Request(
+        'GET',
+        Uri.parse(
+            '${baseUrl}fixtures?date=${DateTime.now().toIso8601String().split("T")[0]}'));
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
@@ -24,9 +27,13 @@ class ApiService {
     }
   }
 
-    Future<Fixture> getTeamMatchesToday(int team) async {
+  Future<Fixture> getTeamMatchesToday(int team) async {
     var headers = {'x-rapidapi-key': apikey, 'x-rapidapi-host': host};
-var request = http.Request('GET', Uri.parse('${baseUrl}fixtures?date=${DateTime.now().toIso8601String().split("T")[0]}&team=$team'));
+    var currentDate = DateTime.now();
+    var request = http.Request(
+        'GET',
+        Uri.parse(
+            '${baseUrl}fixtures?date=${currentDate.toIso8601String().split("T")[0]}&team=$team&season=${currentDate.year}'));
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
@@ -91,9 +98,10 @@ var request = http.Request('GET', Uri.parse('${baseUrl}fixtures?date=${DateTime.
     }
   }
 
-    Future<List<Team>> searchTeams(String search) async {
+  Future<List<Team>> searchTeams(String search) async {
     var headers = {'x-rapidapi-key': apikey, 'x-rapidapi-host': host};
-    var request = http.Request('GET', Uri.parse('${baseUrl}teams?search=$search'));
+    var request =
+        http.Request('GET', Uri.parse('${baseUrl}teams?search=$search'));
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();

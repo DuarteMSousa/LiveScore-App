@@ -39,10 +39,10 @@ class SharedPreferencesProvider with ChangeNotifier {
     notifyListeners();
     try {
       await helper.addFavTeam(id);
+      favTeams.value.add(id);
     } catch (e) {
       errorMessage.value = e.toString();
     } finally {
-      favTeams.value.add(id);
       isLoading.value = false;
       notifyListeners();
     }
@@ -53,10 +53,10 @@ class SharedPreferencesProvider with ChangeNotifier {
     notifyListeners();
     try {
       await helper.deleteFavTeam(id);
+      favTeams.value.remove(id);
     } catch (e) {
       errorMessage.value = e.toString();
     } finally {
-      favTeams.value.remove(id);
       isLoading.value = false;
       notifyListeners();
     }
@@ -81,10 +81,10 @@ class SharedPreferencesProvider with ChangeNotifier {
     notifyListeners();
     try {
       await helper.addFavLeague(id);
+      favLeagues.value.add(id);
     } catch (e) {
       errorMessage.value = e.toString();
     } finally {
-      favLeagues.value.add(id);
       isLoading.value = false;
       notifyListeners();
     }
@@ -95,10 +95,10 @@ class SharedPreferencesProvider with ChangeNotifier {
     notifyListeners();
     try {
       await helper.deleteFavLeague(id);
+      favLeagues.value.remove(id);
     } catch (e) {
       errorMessage.value = e.toString();
     } finally {
-      favLeagues.value.remove(id);
       isLoading.value = false;
       notifyListeners();
     }

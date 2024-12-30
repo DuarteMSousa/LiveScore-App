@@ -20,10 +20,11 @@ class MatchProvider with ChangeNotifier {
   Fixture? selectedMatch;
 
   /// Lista de utilizadores selecionados.
-  Map<int,List<Fixture>>? allSelectedMatchesHash;
+  Map<int, List<Fixture>>? allSelectedMatchesHash={};
 
   /// Lista de utilizadores selecionados.
-  Map<int,List<Fixture>>? favSelectedMatchesHash;
+  Map<int, List<Fixture>>? favSelectedMatchesHash={};
+
   /// Limpa a mensagem de erro.
   void changeErrorValue(String e) {
     errorMessage.value = '';
@@ -68,12 +69,41 @@ class MatchProvider with ChangeNotifier {
   }
 
   Future<void> loadAllFavTeamsMatches(List<int> teams) async {
+    if (teams.isNotEmpty) {
+      isLoading.value = true;
+      notifyListeners();
+      try {
+        var matchHash = <int, List<Fixture>>{};
+        for (var leagueId in allSelectedMatchesHash!.keys) {
+          var leagueMatches = allSelectedMatchesHash![leagueId]!;
+          for (var match in leagueMatches) {
+            if (teams.contains(match.teams!.home!.id) ||
+                teams.contains(match.teams!.away!.id)) {
+              if (matchHash.containsKey(leagueId)) {
+                matchHash[leagueId]!.add(match);
+              } else {
+                matchHash[leagueId] = [match];
+              }
+            }
+          }
+        }
+        favSelectedMatchesHash = matchHash;
+      } catch (e) {
+        errorMessage.value = e.toString();
+      } finally {
+        isLoading.value = false;
+        notifyListeners();
+      }
+    }
+  }
+
+  Future<void> loadAllFavTeamsMatchesPaid(List<int> teams) async {
     isLoading.value = true;
     notifyListeners();
     try {
-      var matchList=[];
+      var matchList = [];
       for (var team in teams) {
-       matchList.add(_apiService.getTeamMatchesToday(team));
+        matchList.add(await _apiService.getTeamMatchesToday(team));
       }
       var matchHash = <int, List<Fixture>>{};
       for (var match in matchList) {

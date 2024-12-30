@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class BottomBar extends StatelessWidget implements PreferredSizeWidget {
   const BottomBar({super.key});
@@ -25,7 +26,7 @@ class BottomBar extends StatelessWidget implements PreferredSizeWidget {
                     color: Theme.of(context).colorScheme.onPrimary,
                   )),
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {context.push('/todayMatches');},
                   icon: Icon(
                     Icons.sports_soccer,
                     size: 35,

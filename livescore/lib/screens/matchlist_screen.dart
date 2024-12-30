@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:livescore/models/fixture.dart';
 import 'package:livescore/providers/match_provider.dart';
 import 'package:livescore/providers/shared_preferences_provider.dart';
+import 'package:livescore/widgets/AutoScrollText.dart';
 import 'package:livescore/widgets/bottombar.dart';
 import 'package:livescore/widgets/topbar.dart';
 import 'package:provider/provider.dart';
@@ -21,12 +22,12 @@ class _MatchlistScreenState extends State<MatchlistScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this, initialIndex: 1);
-    context.read<MatchProvider>().loadAllTodayMatches();
-    loadFavTeamsMatches();
+    _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
+    loadMatches();
   }
 
-  Future<void> loadFavTeamsMatches() async {
+  Future<void> loadMatches() async {
+    await context.read<MatchProvider>().loadAllTodayMatches();
     await context.read<SharedPreferencesProvider>().loadFavTeams();
     await context.read<MatchProvider>().loadAllFavTeamsMatches(
         context.read<SharedPreferencesProvider>().favTeams.value);
@@ -74,6 +75,16 @@ class _MatchlistScreenState extends State<MatchlistScreen>
                         SingleChildScrollView(
                           child: Column(
                             children: [
+                              if (matchProvider.favSelectedMatchesHash!.isEmpty)
+                                Center(
+                                  child: Text(
+                                    "Sem clubes favoritos",
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onTertiary),
+                                  ),
+                                ),
                               for (var leagueId
                                   in matchProvider.favSelectedMatchesHash!.keys)
                                 Column(
@@ -223,12 +234,14 @@ class leagueHeader extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  league.name,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onTertiary,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: AutoScrollText(
+                    text: league.name,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onTertiary,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 Image(
@@ -236,6 +249,13 @@ class leagueHeader extends StatelessWidget {
                   width: 50,
                   height: 50,
                   fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Icon(
+                      Icons.broken_image,
+                      size: 50,
+                      color: Colors.grey,
+                    );
+                  },
                 ),
               ],
             ),
