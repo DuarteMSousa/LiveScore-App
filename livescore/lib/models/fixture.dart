@@ -26,10 +26,11 @@ class Fixture {
 
   factory Fixture.fromJson(Map<String, dynamic> json) {
     return Fixture(
-      id: json['fixture']['id']??0,
-      timezone: json['fixture']['timezone']??0,
-      date: DateTime.parse(json['fixture']['date']??DateTime.now().toString()),
-      timestamp: json['fixture']['timestamp']??0,
+      id: json['fixture']['id'] ?? 0,
+      timezone: json['fixture']['timezone'] ?? 0,
+      date:
+          DateTime.parse(json['fixture']['date'] ?? DateTime.now().toString()),
+      timestamp: json['fixture']['timestamp'] ?? 0,
       periods: json['fixture']['periods'] != null
           ? Periods.fromJson(json['fixture']['periods'])
           : null,
@@ -64,8 +65,8 @@ class Status {
 
   factory Status.fromJson(Map<String, dynamic> json) {
     return Status(
-      long: json['long']??"",
-      short: json['short']??"",
+      long: json['long'] ?? "",
+      short: json['short'] ?? "",
       elapsed: json['elapsed'] ?? 0,
       extra: json['extra'] ?? 0,
     );
@@ -103,13 +104,20 @@ class Event {
 class Player {
   final int id;
   final String name;
+  final int? number;
+  final String? pos;
+  final String? grid;
 
-  Player({required this.id, required this.name});
+  Player(
+      {this.number, this.pos, this.grid, required this.id, required this.name});
 
   factory Player.fromJson(Map<String, dynamic> json) {
     return Player(
       id: json['id'] ?? -1,
       name: json['name'] ?? "null",
+      number: json['number'] ?? -1,
+      pos: json['pos'] ?? "",
+      grid: json['grid'] ?? "",
     );
   }
 }
@@ -136,8 +144,8 @@ class Goals {
 
   factory Goals.fromJson(Map<String, dynamic> json) {
     return Goals(
-      home: json['home']??0,
-      away: json['away']??0,
+      home: json['home'] ?? 0,
+      away: json['away'] ?? 0,
     );
   }
 }
@@ -162,13 +170,13 @@ class League {
 
   factory League.fromJson(Map<String, dynamic> json) {
     return League(
-      id: json['id']??0,
-      name: json['name']??"",
-      country: json['country']??"",
-      logo: json['logo']??"",
-      flag: json['flag']??"",
-      season: json['season']??"",
-      round: json['round']??"",
+      id: json['id'] ?? 0,
+      name: json['name'] ?? "",
+      country: json['country'] ?? "",
+      logo: json['logo'] ?? "",
+      flag: json['flag'] ?? "",
+      season: json['season'] ?? "",
+      round: json['round'] ?? "",
     );
   }
 }
@@ -182,9 +190,9 @@ class Venue {
 
   factory Venue.fromJson(Map<String, dynamic> json) {
     return Venue(
-      id: json['id']??0,
-      name: json['name']??"",
-      city: json['city']??"",
+      id: json['id'] ?? 0,
+      name: json['name'] ?? "",
+      city: json['city'] ?? "",
     );
   }
 }
@@ -226,9 +234,9 @@ class Team {
 
   factory Team.fromJson(Map<String, dynamic> json) {
     return Team(
-      id: json['id']??0,
-      name: json['name']??'',
-      logo: json['logo']??'',
+      id: json['id'] ?? 0,
+      name: json['name'] ?? '',
+      logo: json['logo'] ?? '',
     );
   }
 }

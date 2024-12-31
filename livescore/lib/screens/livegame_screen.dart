@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:livescore/models/fixture.dart';
 import 'package:livescore/providers/match_provider.dart';
 import 'package:livescore/screens/matchlist_screen.dart';
+import 'package:livescore/widgets/AutoScrollText.dart';
 import 'package:livescore/widgets/topbar.dart';
 import 'package:livescore/widgets/bottombar.dart';
 import 'package:provider/provider.dart';
@@ -19,12 +20,13 @@ class _LivegameScreenState extends State<LivegameScreen> {
   void initState() {
     super.initState();
     context.read<MatchProvider>().loadMatchById(widget.id);
+    context.read<MatchProvider>().loadMatchLineUps(widget.id);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const  Topbar(),
+      appBar: const Topbar(),
       body: Consumer<MatchProvider>(
         builder: (context, matchProvider, child) {
           if (matchProvider.isLoading.value) {
@@ -78,7 +80,7 @@ class Placard extends StatelessWidget {
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 50),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.tertiary,
         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -97,6 +99,7 @@ class Placard extends StatelessWidget {
               flex: 1,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Image(
                     height: screenHeight * 0.10,
@@ -181,7 +184,7 @@ class _GameInfoState extends State<GameInfo> with TickerProviderStateMixin {
         child: Column(
           children: [
             TabBar(
-              padding: EdgeInsets.only(top: 20),
+              padding: EdgeInsets.only(top: 10),
               tabs: [
                 Text(
                   "Resumo",
@@ -239,9 +242,7 @@ class Resumo extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: events.map((event) {
-            return FractionallySizedBox(
-                widthFactor: 1,
-                child: EventLine(event: event, home: event.team!.id == homeId));
+            return EventLine(event: event, home: event.team!.id == homeId);
           }).toList(),
         ),
       ),
@@ -382,8 +383,9 @@ class EventInfo extends StatelessWidget {
   }
 }
 
-class Player extends StatelessWidget {
-  const Player({super.key});
+class PlayerAvatar extends StatelessWidget {
+  final Player player;
+  const PlayerAvatar({super.key, required this.player});
 
   @override
   Widget build(BuildContext context) {
@@ -392,14 +394,22 @@ class Player extends StatelessWidget {
         InkWell(
           borderRadius: BorderRadius.circular(20),
           onTap: () {
-            print("Circle Avatar tapped!");
+            print("Circle Avatar tapped! ${player.number}");
           },
           child: CircleAvatar(
             radius: 20,
             backgroundColor: Theme.of(context).colorScheme.surface,
+            child: Text(
+              player.number.toString(),
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface, fontSize: 10),
+            ),
           ),
         ),
-        Text("Name")
+        AutoScrollText(
+          text: player.name,
+          style: TextStyle(),
+        )
       ],
     );
   }
@@ -411,54 +421,99 @@ class Team extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+
+    return Consumer<MatchProvider>(builder: (context, matchProvider, child) {
+      if (matchProvider.isLoading.value) {
+        return Center(child: CircularProgressIndicator());
+      }
+
+      if (matchProvider.errorMessage.value.isNotEmpty) {
+        return Center(child: Text(matchProvider.errorMessage.value));
+      }
+      return Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        SizedBox(height: screenHeight * 0.03),
+                        PlayerAvatar(
+                            player: matchProvider.lineups[0].players
+                                .firstWhere((player) => player.grid == "4:1")),
+                      ],
+                    ),
+                    PlayerAvatar(
+                        player: matchProvider.lineups[0].players
+                            .firstWhere((player) => player.grid == "4:2")),
+                    Column(
+                      children: [
+                        SizedBox(height: screenHeight * 0.03),
+                        PlayerAvatar(
+                            player: matchProvider.lineups[0].players
+                                .firstWhere((player) => player.grid == "4:3")),
+                      ],
+                    ),
+                  ],
+                )),
+            SizedBox(height: screenHeight * 0.02),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 60),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    children: [
-                      SizedBox(height: screenHeight * 0.03),
-                      Player(),
-                    ],
-                  ),
-                  Player(),
-                  Column(
-                    children: [SizedBox(height: screenHeight * 0.03), Player()],
-                  ),
+                  PlayerAvatar(
+                      player: matchProvider.lineups[0].players
+                          .firstWhere((player) => player.grid == "3:1")),
+                  PlayerAvatar(
+                      player: matchProvider.lineups[0].players
+                          .firstWhere((player) => player.grid == "3:2")),
+                  PlayerAvatar(
+                      player: matchProvider.lineups[0].players
+                          .firstWhere((player) => player.grid == "3:3")),
                 ],
-              )),
-          SizedBox(height: screenHeight * 0.02),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 60),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [Player(), Player(), Player()],
+              ),
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Player(),
-              Column(
-                children: [SizedBox(height: screenHeight * 0.02), Player()],
-              ),
-              Column(
-                children: [SizedBox(height: screenHeight * 0.02), Player()],
-              ),
-              Player()
-            ],
-          ),
-          SizedBox(height: screenHeight * 0.02),
-          Player(),
-        ],
-      ),
-    );
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                PlayerAvatar(
+                    player: matchProvider.lineups[0].players
+                        .firstWhere((player) => player.grid == "2:1")),
+                Column(
+                  children: [
+                    SizedBox(height: screenHeight * 0.02),
+                    PlayerAvatar(
+                        player: matchProvider.lineups[0].players
+                            .firstWhere((player) => player.grid == "2:2")),
+                  ],
+                ),
+                Column(
+                  children: [
+                    SizedBox(height: screenHeight * 0.02),
+                    PlayerAvatar(
+                        player: matchProvider.lineups[0].players
+                            .firstWhere((player) => player.grid == "2:3")),
+                  ],
+                ),
+                PlayerAvatar(
+                    player: matchProvider.lineups[0].players
+                        .firstWhere((player) => player.grid == "2:4")),
+              ],
+            ),
+            SizedBox(height: screenHeight * 0.02),
+            PlayerAvatar(
+                player: matchProvider.lineups[0].players
+                    .firstWhere((player) => player.grid == "1:1")),
+          ],
+        ),
+      );
+    });
   }
 }

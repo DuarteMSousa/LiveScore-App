@@ -1,6 +1,7 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:livescore/models/fixture.dart';
+import 'package:livescore/models/lineup.dart';
 import 'package:livescore/services/api_service.dart';
 
 /// Controla o estado dos utilizadores e pacotes de utilizadores.
@@ -20,10 +21,12 @@ class MatchProvider with ChangeNotifier {
   Fixture? selectedMatch;
 
   /// Lista de utilizadores selecionados.
-  Map<int, List<Fixture>>? allSelectedMatchesHash={};
+  Map<int, List<Fixture>>? allSelectedMatchesHash = {};
 
   /// Lista de utilizadores selecionados.
-  Map<int, List<Fixture>>? favSelectedMatchesHash={};
+  Map<int, List<Fixture>>? favSelectedMatchesHash = {};
+
+  List<Lineup> lineups = [];
 
   /// Limpa a mensagem de erro.
   void changeErrorValue(String e) {
@@ -114,6 +117,20 @@ class MatchProvider with ChangeNotifier {
         }
       }
       favSelectedMatchesHash = matchHash;
+    } catch (e) {
+      errorMessage.value = e.toString();
+    } finally {
+      isLoading.value = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> loadMatchLineUps(String matchId) async {
+    isLoading.value = true;
+    notifyListeners();
+    try {
+      final lineups = await _apiService.getMatchLineups(matchId);
+      this.lineups = lineups;
     } catch (e) {
       errorMessage.value = e.toString();
     } finally {

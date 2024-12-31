@@ -11,7 +11,7 @@ import 'package:livescore/screens/search_screen.dart';
 final GoRouter router = GoRouter(
   /// Caminho inicial que será carregado ao abrir o aplicativo.
   /// Neste caso, é a página inicial do aplicativo.
-  initialLocation: '/todayMatches',
+  initialLocation: '/livematch/1280728',
 
   /// Define as rotas disponíveis no aplicativo.
   routes: [
