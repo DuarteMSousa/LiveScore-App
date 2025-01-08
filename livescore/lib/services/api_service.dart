@@ -90,9 +90,9 @@ class ApiService {
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
-
     if (response.statusCode == 200) {
       var res = await response.stream.bytesToString();
+      print(res);
       List<dynamic> body = jsonDecode(res)['response'];
       return body.map((item) => Lineup.fromJson(item)).toList();
     } else {

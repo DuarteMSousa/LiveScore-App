@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:livescore/models/fixture.dart';
+import 'package:livescore/models/lineup.dart';
 import 'package:livescore/providers/match_provider.dart';
 import 'package:livescore/screens/matchlist_screen.dart';
 import 'package:livescore/widgets/AutoScrollText.dart';
 import 'package:livescore/widgets/topbar.dart';
 import 'package:livescore/widgets/bottombar.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/src/material/colors.dart' as c;
 
 class LivegameScreen extends StatefulWidget {
   final String id;
@@ -191,7 +193,7 @@ class _GameInfoState extends State<GameInfo> with TickerProviderStateMixin {
                 ),
                 Text("Planteis")
               ],
-              dividerColor: Colors.transparent,
+              dividerColor: c.Colors.transparent,
               controller: _tabController,
             ),
             Expanded(
@@ -420,8 +422,6 @@ class Team extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var screenHeight = MediaQuery.of(context).size.height;
-
     return Consumer<MatchProvider>(builder: (context, matchProvider, child) {
       if (matchProvider.isLoading.value) {
         return Center(child: CircularProgressIndicator());
@@ -431,89 +431,97 @@ class Team extends StatelessWidget {
         return Center(child: Text(matchProvider.errorMessage.value));
       }
       return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      children: [
-                        SizedBox(height: screenHeight * 0.03),
-                        PlayerAvatar(
-                            player: matchProvider.lineups[0].players
-                                .firstWhere((player) => player.grid == "4:1")),
-                      ],
-                    ),
-                    PlayerAvatar(
-                        player: matchProvider.lineups[0].players
-                            .firstWhere((player) => player.grid == "4:2")),
-                    Column(
-                      children: [
-                        SizedBox(height: screenHeight * 0.03),
-                        PlayerAvatar(
-                            player: matchProvider.lineups[0].players
-                                .firstWhere((player) => player.grid == "4:3")),
-                      ],
-                    ),
-                  ],
-                )),
-            SizedBox(height: screenHeight * 0.02),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 60),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  PlayerAvatar(
-                      player: matchProvider.lineups[0].players
-                          .firstWhere((player) => player.grid == "3:1")),
-                  PlayerAvatar(
-                      player: matchProvider.lineups[0].players
-                          .firstWhere((player) => player.grid == "3:2")),
-                  PlayerAvatar(
-                      player: matchProvider.lineups[0].players
-                          .firstWhere((player) => player.grid == "3:3")),
-                ],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Formation4231(lineup:matchProvider.lineups[0]));
+    });
+  }
+}
+
+class Formation4231 extends StatelessWidget {
+  final Lineup lineup;
+  const Formation4231({super.key, required this.lineup});
+
+  @override
+  Widget build(BuildContext context) {
+    var screenHeight = MediaQuery.of(context).size.height;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 PlayerAvatar(
-                    player: matchProvider.lineups[0].players
-                        .firstWhere((player) => player.grid == "2:1")),
-                Column(
-                  children: [
-                    SizedBox(height: screenHeight * 0.02),
-                    PlayerAvatar(
-                        player: matchProvider.lineups[0].players
-                            .firstWhere((player) => player.grid == "2:2")),
-                  ],
-                ),
-                Column(
-                  children: [
-                    SizedBox(height: screenHeight * 0.02),
-                    PlayerAvatar(
-                        player: matchProvider.lineups[0].players
-                            .firstWhere((player) => player.grid == "2:3")),
-                  ],
-                ),
+                    player:lineup.players
+                        .firstWhere((player) => player.grid == "5:1")),
+              ],
+            )),
+        SizedBox(height: screenHeight * 0.02),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 60),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              PlayerAvatar(
+                  player: lineup.players
+                      .firstWhere((player) => player.grid == "4:1")),
+              PlayerAvatar(
+                  player: lineup.players
+                      .firstWhere((player) => player.grid == "4:2")),
+                       PlayerAvatar(
+                  player: lineup.players
+                      .firstWhere((player) => player.grid == "4:3")),
+            ],
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 60),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              PlayerAvatar(
+                  player: lineup.players
+                      .firstWhere((player) => player.grid == "3:1")),
+              PlayerAvatar(
+                  player: lineup.players
+                      .firstWhere((player) => player.grid == "3:2")),
+            ],
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            PlayerAvatar(
+                player: lineup.players
+                    .firstWhere((player) => player.grid == "2:1")),
+            Column(
+              children: [
+                SizedBox(height: screenHeight * 0.02),
                 PlayerAvatar(
-                    player: matchProvider.lineups[0].players
-                        .firstWhere((player) => player.grid == "2:4")),
+                    player: lineup.players
+                        .firstWhere((player) => player.grid == "2:2")),
               ],
             ),
-            SizedBox(height: screenHeight * 0.02),
+            Column(
+              children: [
+                SizedBox(height: screenHeight * 0.02),
+                PlayerAvatar(
+                    player: lineup.players
+                        .firstWhere((player) => player.grid == "2:3")),
+              ],
+            ),
             PlayerAvatar(
-                player: matchProvider.lineups[0].players
-                    .firstWhere((player) => player.grid == "1:1")),
+                player: lineup.players
+                    .firstWhere((player) => player.grid == "2:4")),
           ],
         ),
-      );
-    });
+        SizedBox(height: screenHeight * 0.02),
+        PlayerAvatar(
+            player:lineup.players
+                .firstWhere((player) => player.grid == "1:1")),
+      ],
+    );
   }
 }
