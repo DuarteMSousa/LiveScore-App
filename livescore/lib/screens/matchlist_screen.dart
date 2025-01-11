@@ -1,9 +1,9 @@
+import 'package:auto_scroll_text/auto_scroll_text.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:livescore/models/fixture.dart';
 import 'package:livescore/providers/match_provider.dart';
 import 'package:livescore/providers/shared_preferences_provider.dart';
-import 'package:livescore/widgets/AutoScrollText.dart';
 import 'package:livescore/widgets/bottombar.dart';
 import 'package:livescore/widgets/topbar.dart';
 import 'package:provider/provider.dart';
@@ -236,12 +236,13 @@ class leagueHeader extends StatelessWidget {
               children: [
                 Expanded(
                   child: AutoScrollText(
-                    text: league.name,
+                    league.name,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onTertiary,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
+                    intervalSpaces: 40,
                   ),
                 ),
                 Image(

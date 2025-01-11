@@ -1,9 +1,9 @@
+import 'package:auto_scroll_text/auto_scroll_text.dart';
 import 'package:flutter/material.dart';
 import 'package:livescore/models/fixture.dart';
 import 'package:livescore/models/lineup.dart';
 import 'package:livescore/providers/match_provider.dart';
 import 'package:livescore/screens/matchlist_screen.dart';
-import 'package:livescore/widgets/AutoScrollText.dart';
 import 'package:livescore/widgets/topbar.dart';
 import 'package:livescore/widgets/bottombar.dart';
 import 'package:provider/provider.dart';
@@ -409,7 +409,7 @@ class PlayerAvatar extends StatelessWidget {
           ),
         ),
         AutoScrollText(
-          text: player.name,
+          player.name,
           style: TextStyle(),
         )
       ],
@@ -432,7 +432,7 @@ class Team extends StatelessWidget {
       }
       return Padding(
           padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Formation4231(lineup:matchProvider.lineups[0]));
+          child: Formation4231(lineup: matchProvider.lineups[0]));
     });
   }
 }
@@ -454,7 +454,7 @@ class Formation4231 extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 PlayerAvatar(
-                    player:lineup.players
+                    player: lineup.players
                         .firstWhere((player) => player.grid == "5:1")),
               ],
             )),
@@ -470,7 +470,7 @@ class Formation4231 extends StatelessWidget {
               PlayerAvatar(
                   player: lineup.players
                       .firstWhere((player) => player.grid == "4:2")),
-                       PlayerAvatar(
+              PlayerAvatar(
                   player: lineup.players
                       .firstWhere((player) => player.grid == "4:3")),
             ],
@@ -519,8 +519,8 @@ class Formation4231 extends StatelessWidget {
         ),
         SizedBox(height: screenHeight * 0.02),
         PlayerAvatar(
-            player:lineup.players
-                .firstWhere((player) => player.grid == "1:1")),
+            player:
+                lineup.players.firstWhere((player) => player.grid == "1:1")),
       ],
     );
   }
