@@ -5,7 +5,7 @@ import 'package:livescore/models/lineup.dart';
 
 class ApiService {
   final String baseUrl = "https://v3.football.api-sports.io/";
-  final String apikey = "99f155ab0f98ae3f59b71b763d2b55e8";
+  final String apikey = "4dd4ca6791d8fa4b538347397025702c";
   final String host = "v3.football.api-sports.io";
 
   Future<List<Fixture>> getAllMatchesToday() async {
